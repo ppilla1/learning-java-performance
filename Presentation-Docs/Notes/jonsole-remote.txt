@@ -1,0 +1,4 @@
+“-Dcom.sun.management.jmxremote.port=<Port-No> 
+-Dcom.sun.management.jmxremote.authenticate=false 
+-Dcom.sun.management.jmxremote.ssl=false
+ -Djava.rmi.server.hostname=<IP-Add of Host>”
