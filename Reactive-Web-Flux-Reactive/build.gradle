@@ -1,3 +1,32 @@
-plugins {
-	id 'java'
+buildscript {
+    ext {
+        springBoot_version = '2.7.2'
+        springDependencyMgr_version = '1.0.12.RELEASE'
+    }
+    dependencies {
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${springBoot_version}"
+    }
 }
+plugins {
+    id 'org.springframework.boot' version "${springBoot_version}"
+    id 'io.spring.dependency-management' version "${springDependencyMgr_version}"
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
+
+    runtimeOnly 'com.h2database:h2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
