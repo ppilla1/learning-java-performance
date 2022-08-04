@@ -1,6 +1,7 @@
 package demo;
 
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 import java.util.List;
 
-
+@Log4j2
 @RestController
 public class WebController {
 
@@ -25,7 +26,7 @@ public class WebController {
 
     @GetMapping("/tweets-blocking")
     public List<Tweet> getTweetsBlocking() {
-        System.out.println("Starting BLOCKING Controller!");
+        log.info("Starting BLOCKING Controller!");
         final String uri = getSlowServiceUri();
 
         RestTemplate restTemplate = new RestTemplate();
@@ -36,13 +37,13 @@ public class WebController {
 
         List<Tweet> result = response.getBody();
         result.forEach(tweet -> System.out.println(tweet.toString()));
-        System.out.println("Exiting BLOCKING Controller!");
+        log.info("Exiting BLOCKING Controller!");
         return result;
     }
 
     @GetMapping(value = "/tweets-non-blocking", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Tweet> getTweetsNonBlocking() {
-        System.out.println("Starting NON-BLOCKING Controller!");
+        log.info("Starting NON-BLOCKING Controller!");
         Flux<Tweet> tweetFlux = WebClient.create()
                 .get()
                 .uri(getSlowServiceUri())
@@ -59,7 +60,7 @@ public class WebController {
          * System.out.println("All data has been recieved") ,sub-> sub.request(1));
          */
 
-        System.out.println("Exiting NON-BLOCKING Controller!");
+        log.info("Exiting NON-BLOCKING Controller!");
         return tweetFlux;
     }
 
